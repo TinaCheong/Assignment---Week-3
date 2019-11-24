@@ -1,0 +1,91 @@
+1. What is Encapsulation? Try to list out the benefits of Encapsulation.
+封裝就是利用kotlin的可見範圍修飾符號（Visibility ｍodifiers）來設定程式的類別、變數和函式等的可見範圍。即我們可以透過這些修飾符號來宣告一個變數只能在某一類別、某一檔案、某一程式包（package）或某一模組裏可以看見和使用。
+Kotlin分別有四種可見性修飾符號︰public、private、internal、protected，可以分別用在頂層宣告（Top delcarations，即不屬於任何類別的函式或變數）和類別變數中︰
+
+public︰在Kotlin中，若無特別聲明則所有宣告、函式和變數皆為public，即它完全是公開的，任何地方都可以存取和修改。
+
+private︰若設在頂層宣告中則代表它只在同一個file中可以存取；設在類別變數中則是代表只有同一個類別的才能存取。
+
+internal︰若設在頂層宣告中則代表它只在同一個模組moudle內可以存取；設在類別變數中則是代表本模組的所有的客戶端都可以存取。
+
+protected︰它不能用在頂層宣告中，而用在類別變數中則是代表讓類別變數能讓子類別及同個類別的物件及功能存取。
+
+封裝的好處在於︰
+透過設定不同層級的封裝，我們可以自由的設定和限制變數的存取和修改，以保障程式的穩定性。
+同時在處於共同開發的情況下，可以確保其他發開者不能隨便更改物件的資料設定而令程式碼相衝。
+可以把客戶端所需要的資料以最小限度的方式提供出去，同時隱藏他們不需要修改的資料也可以避免我們的類別所產生出來的物件因被隨意修改而導致程式崩潰、錯誤或閃退。
+
+2. Try to explain what is enum and why we use them.
+在Kotlin的類別中有一個為列舉類別（enum class），它的作用是快速列舉和定義多個物件（但都是常數／常量），讓我們可以在main中更容易取得這些物件的屬性（name和ordinal）和函式（value、valueOf或自訂函式）。同時，列舉類別可以確保變數的值只能被設成所指定的資料型態，而不會自動轉型其他型態，這更能降低程式出現bug的可能性。
+
+3. How to use enum in Kotlin? Attach a sample code that use enum in Kotlin.
+在使用時我們要在class前加上關鍵字enum，再在大括號內用大寫命名常數（多個常數需用逗號隔開），如此我們就可以在main裏面使用他們的value︰
+
+enum class Difficulty{
+    EASY,
+    NORMAL,
+    HARD,
+    INSANE
+}
+
+fun main() {
+    val difficulties = Difficulty.NORMAL
+    println(difficulties)
+}
+
+//Result︰NORMAL
+
+我們也可以給它預設值︰
+enum class Difficulty(val value: Int){
+    EASY(0),
+    NORMAL(1),
+    HARD(2),
+    INSANE(3)
+}
+
+fun main() {
+    val difficulties = Difficulty.NORMAL
+    println(difficulties)
+    println(difficulties.value)
+}
+//Result︰
+//NORMAL
+//1
+
+也可以用抽象類別來加入新函式，不過要記得在常量與抽象類別之間，要加上「;」︰
+
+enum class Difficulty(val value: Int) {
+    EASY(0) {
+        override fun test(): String {
+            return "Test"
+        }
+    },
+    NORMAL(1){
+        override fun test(): String {
+            return "Test"
+        }
+    },
+    HARD(2){
+        override fun test(): String {
+            return "Test"
+        }
+    },
+    INSANE(3){
+        override fun test(): String {
+            return "Test"
+        }
+    };
+    abstract fun test() : String
+}
+
+
+4. What are the differences between LinearLayout and RelativeLayout? Try to explain in details.
+
+在LinearLayout（線性版面）內，我們可以加入許多元件，而所有的元件均是以水平或垂直的形式由上至下、或由左至右排列。在元件的設定方面，則可以用屬性orientation來設定其為水平或是垂直排列。
+
+RelativeLayout（相對位置版面）在建立之時，其版面就會是一個父容器／父元件（Parent view），在這版面中，我們也可以同樣加入許多元件，不過這些元件在屬性關係上就會是屬於父元件的子元件（Child view），因此所有子元件的排列位置設定是相對於父元件或其他子元件／兄弟元件（即子元子和子元子之間的關係）來決定的。例如當我們使用屬性layout_centerHorizontal時，就會把元件對齊於父元件橫向中間的位置。
+
+所以，線性版面和相對位置版面的差別在於，他們一開始的版面以及和元件排列方式都不相同︰前者就如其名字一樣，是用水平或垂直的方式劃分介面和排列元件；而後者則是用父元件和兄弟元件之間的關係來排列。這就是為甚麼，當我們在線性版面中設定元件的layout_height和layout_width屬性為matc_parent時，元件的就會填滿一層的空間；但若是在相對位置版面中把layout_height或layout_width做同樣的事時，元件就會填滿整個外框（父元件）的原因。
+
+5. Try to explain the benefits of ConstraintLayout. Why you should use it?
+這是由於在設計較為複雜的版面時，RelativeLayout和LinearLayout通常都需要用到很多的階層，因為它們都需要利用層級的關係才能把view和ViewGroup元件按順序排列，這會導致版面的導入速度變慢、效能也較差；而ConstraintLayout則不需要使用層級關係，只要利用Constrainty就能排列，不需要再產生新的ViewGroup，因此層級較少（基本上是沒有層級），載入的速度也會較快。所以選用ConstraintLayout的原因除了是設計較為方便外，在運行的效率上也優於RelativeLayout和LinearLayout。
